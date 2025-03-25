@@ -1,0 +1,56 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+@use 'sass:color';
+
+.anuncios {
+    @include m.tablet {
+        @include m.grid(3, 3)
+    }
+    
+}
+
+.anuncio {
+    background-color: v.$gris;
+    border: solid .1rem color.adjust(v.$gris, $lightness: -20%);
+    margin-bottom: 2rem;
+}
+
+.anuncio__contenido {
+    padding: 2rem;
+    h3 {
+        margin: unset;
+    }
+    p {
+        margin: unset;
+    }
+    .precio {
+        color: v.$verde;
+        font-weight: v.$black;
+        margin-bottom: 1rem;
+    }
+    .anuncio__boton {
+        margin-top: 2rem;
+    }
+}
+
+.anuncio__cantidad {
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    li {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        gap: 2rem;
+        list-style: none;
+        img {
+            max-height: 5rem;
+        }
+    }
+}
+
+.vermas {
+    display: flex;
+    justify-content: flex-end;
+}

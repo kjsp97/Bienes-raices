@@ -1,0 +1,20 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.dark-mode{
+    background-color: v.$negro;
+    color: v.$blanco;
+    p{
+        color: v.$blanco;
+    }
+    .anuncio{
+        background-color: v.$grisOscuro;
+    }
+    .anuncio__contenido, .anuncio{
+        li{
+            img{
+                filter: invert(100%);
+            }
+        }
+    }
+}

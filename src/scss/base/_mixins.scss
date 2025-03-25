@@ -1,0 +1,43 @@
+@use 'variables' as *;
+@use 'sass:color';
+/** Media Queries **/
+@mixin movil {
+    @media (min-width: #{$telefono}) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (min-width: #{$tablet}) {
+        @content;
+    }
+}
+  
+@mixin desktop {
+    @media (min-width: #{$desktop}) {
+        @content;
+    }
+}
+@mixin grid($columns: 0, $column-gap : 0) {
+    display: grid;
+    column-gap: $column-gap *1rem;
+    grid-template-columns: repeat($columns, 1fr);
+}
+
+@mixin boton($b-color, $display){
+    padding: 1rem 3rem;
+    display: $display;
+    background-color: $b-color;
+    text-align: center;
+    color: $blanco;
+    cursor: pointer;
+    &:hover{
+        background-color: color.adjust($b-color, $lightness: +5%);
+    }
+}
+
+@mixin border(){
+    border-radius: 1rem;
+    border-color: color.adjust($gris, $lightness: -15%);
+    border-style: solid;
+}

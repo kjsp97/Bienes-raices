@@ -1,0 +1,100 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+
+.barra {
+    display: flex;
+    flex-direction: column;
+    padding-top: 3rem;
+    align-items: center;
+    
+    @include m.tablet {
+        
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.navegacion {
+    
+    display: none;
+    align-items: center;
+    &.on{
+        display: flex;
+        flex-direction: column;
+        
+        @include m.tablet{
+            flex-direction: row;
+        }
+    }
+    @include m.tablet {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+    }
+    a {
+        display: block;
+        text-align: center;
+        color: v.$blanco;
+        text-decoration: none;
+        margin: 1rem auto;
+        img{
+            height: 3.5rem;
+            filter: invert(100%);
+        }
+        &:hover{
+            color: v.$verde;
+        }
+    }
+}
+
+
+.menu-barra {
+    width: 5rem;
+    @include m.tablet{
+        margin: 0;
+        img {
+            display: none;
+        }
+    }
+}
+
+.on{
+    display: flex;
+    flex-direction: column;
+    @include m.tablet{
+        flex-direction: row;
+    }
+    
+}
+
+// visibility: hidden;
+// opacity: 0;
+// transition: visibility .3s ease-in-out, opacity .5s linear;
+// &.on{
+//     display: flex;
+//     align-items: center;
+//     opacity: 1;
+// }
+
+
+// .navegacion {
+//     height: 0;
+//     overflow: hidden;
+//     opacity: 0;
+//     visibility: hidden;
+//     transition: height 0.5s ease-in-out, opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+
+//     &.on {
+//         height: auto;  // Se ajusta al contenido
+//         opacity: 1;
+//         visibility: visible;
+//         display: flex;
+//         flex-direction: column;
+
+//         @include tablet {
+//             flex-direction: row;
+//         }
+//     }
+// }

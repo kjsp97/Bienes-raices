@@ -1,0 +1,53 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.final {
+    @include m.tablet {
+        display: grid;
+        grid-template-columns: 2fr 1fr; 
+        column-gap: 2rem;
+    }
+}
+
+.blog-entrada {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5rem;
+    &:last-of-type {
+        margin-bottom: unset;
+    }
+    
+    @include m.tablet {
+        flex-direction: row;
+        column-gap: 2rem;
+    }
+    
+    picture {
+        margin: 0 auto;
+        max-width: 30rem; /* OJO SALTOJO */
+    }
+}
+
+.blog-descripcion {
+    display: flex;
+    flex-direction: column;
+    h4, p {
+        text-align: left;
+        margin: unset;
+    }
+    h4 {
+        text-decoration: none;
+        color: v.$negro;
+        &::after {
+            content: '';
+            display: block;
+            height: .5rem;
+            width: 15rem;
+            background-color: v.$verde;
+            margin-bottom: 1rem;
+        }
+    }
+    span {
+        color: v.$amarillo;
+    }
+}

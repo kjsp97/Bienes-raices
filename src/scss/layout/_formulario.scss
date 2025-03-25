@@ -1,0 +1,48 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+fieldset{
+    @include m.border;
+}
+legend{
+    font-size: 1.7rem;
+}
+.type{
+    display: flex;
+    flex-direction: column;
+    label {
+        font-weight: v.$bold;
+        text-transform: uppercase;
+        margin-top: 0.5rem;
+    }
+    input{
+        padding: 1rem;
+        @include m.border;
+    }
+    textarea {
+        @include m.border;
+        min-height: 15rem;
+        resize: none;
+    }
+    select{
+        padding: 1rem;
+        @include m.border;
+    }
+}
+
+.contacto-form{
+    input {
+        margin: 0 2rem;
+    }
+}
+
+.texto-form {
+    margin: 1rem 0 0 0;
+    font-size: 1.5rem;
+}
+
+.boton-gris-from{
+    display: flex;
+    justify-content: flex-end;
+}
+
