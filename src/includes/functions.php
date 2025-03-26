@@ -2,7 +2,7 @@
 
 require __DIR__ . '/app.php';
 
-function incluirTemplates(string $name, bool $inicio = false, $login = false) {
+function incluirTemplates(string $name, bool $inicio = false, bool $login = false) {
     include TEMPLATES_URL . "/{$name}.php";
 }
 
