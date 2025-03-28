@@ -1,5 +1,6 @@
 <?php 
-require __DIR__ .'/src/includes/functions.php';
+require __DIR__ .'/includes/app.php';
+
 incluirTemplates('header');
 ?>
 

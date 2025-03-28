@@ -1,6 +1,5 @@
 <?php 
-require __DIR__ .'/src/includes/functions.php';
-require __DIR__ .'/src/includes/config/database.php';
+require __DIR__ .'/includes/app.php';
 $db = conectarDB();
 incluirTemplates('header');
 

@@ -1,5 +1,5 @@
 <?php 
-require __DIR__ .'/src/includes/functions.php';
+require __DIR__ .'/includes/app.php';
 incluirTemplates('header');
 
 ?>
@@ -9,7 +9,7 @@ incluirTemplates('header');
         <section class="seccion contenedor">
         <?php
         $limit = 6;
-        include __DIR__ . '/src/includes/templates/anuncios.php';
+        include __DIR__ . '/includes/templates/anuncios.php';
         ?>
         </section>
     </main>

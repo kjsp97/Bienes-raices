@@ -1,0 +1,17 @@
+{
+    "name": "pc/bienesraices_2025",
+    "description": "Composer en primer proyecto",
+    "autoload": {
+        "psr-4": {
+            "Pc\\Bienesraices2025\\": "src/",
+            "App\\": "./classes"
+        }
+    },
+    "authors": [
+        {
+            "name": "Kevin",
+            "email": "kjoseph@correo.com"
+        }
+    ],
+    "require": {}
+}

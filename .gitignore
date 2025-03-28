@@ -4,3 +4,4 @@ imagenes/
 build/img/
 src/img/
 node_modules/
+/vendor/

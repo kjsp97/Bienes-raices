@@ -1,5 +1,5 @@
 <?php 
-require __DIR__ .'/src/includes/functions.php';
+require __DIR__ .'/includes/app.php';
 incluirTemplates('header', true);
 
 ?>
@@ -29,7 +29,7 @@ incluirTemplates('header', true);
         <h2>Casas y Departamentos en Venta</h2>
         <?php
         $limit = 3;
-        include __DIR__ . '/src/includes/templates/anuncios.php';
+        include __DIR__ . '/includes/templates/anuncios.php';
         ?>
 
         <div class="vermas" >

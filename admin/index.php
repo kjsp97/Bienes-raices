@@ -1,6 +1,5 @@
 <?php
-require __DIR__ . '/../src/includes/functions.php';
-require __DIR__ . '/../src/includes/config/database.php';
+require __DIR__ .'/../includes/app.php';
 
 $auth = autentificacionAdmin();
 // print_r($_SESSION);
@@ -64,9 +63,6 @@ $valor = $_GET['valor']?? null;
 </div>
 <main class="contenedor seccion">
     <h1>Administrador de DB</h1>
-
-    <a href="/admin/propiedades/crear.php" class="boton boton-gris">Crear Propiedad</a>
-
     <table class="table-propiedades">
         <thead>
             <tr>
@@ -96,6 +92,8 @@ $valor = $_GET['valor']?? null;
 
         </tbody>
     </table>
+
+    <a href="/admin/propiedades/crear.php" class="boton boton-gris">Crear Propiedad</a>
 </main>
 
 <?php 
