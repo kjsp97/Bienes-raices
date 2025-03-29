@@ -9,11 +9,23 @@ function incluirTemplates(string $name, bool $inicio = false, bool $login = fals
 }
 
 
-function autentificacionAdmin() : bool {
+function autentificacionAdmin() {
     session_start();
-    $auth = $_SESSION['login'];
-    if ($auth) {
-        return true;
+    if (!$_SESSION['login']) {
+        header('location: /');
     }
-    return false;
+}
+
+function debugear($variable) {
+    echo '<pre>';
+    var_dump($variable);
+    echo '</pre>';
+exit;
+}
+
+function printr($variable) {
+    echo '<pre>';
+    var_dump($variable);
+    echo '</pre>';
+exit;
 }

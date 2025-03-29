@@ -1,11 +1,7 @@
 <?php
 require __DIR__ .'/../includes/app.php';
 
-$auth = autentificacionAdmin();
-// print_r($_SESSION);
-if (!$auth) {
-    header('location: /');
-}
+autentificacionAdmin();
 
 $db = conectarDB();
 incluirTemplates('header');

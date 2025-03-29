@@ -2,11 +2,7 @@
 require __DIR__ .'/../../includes/app.php';
 
 
-$auth = autentificacionAdmin();
-// print_r($_SESSION);
-if (!$auth) {
-    header('location: /');
-}
+autentificacionAdmin();
 
 $db = conectarDB();
 incluirTemplates('header');
@@ -29,7 +25,7 @@ $descripcion = $propiedad['descripcion'];
 $habitaciones = $propiedad['habitaciones'];
 $wc = $propiedad['wc'];
 $parking = $propiedad['parking'];
-$vendedor = $propiedad['vendedores_id'];
+$vendedor = $propiedad['vendedor'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
@@ -104,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $nombreImagen = $propiedad['imagen'];
         }
         
-        $query = "UPDATE propiedades SET titulo = '{$titulo}', precio = '{$precio}', imagen = '{$nombreImagen}', descripcion = '{$descripcion}', habitaciones = '{$habitaciones}', wc = '{$wc}', parking = '{$parking}', vendedores_id = '{$vendedor}' WHERE ID = '$valor' ";
+        $query = "UPDATE propiedades SET titulo = '{$titulo}', precio = '{$precio}', imagen = '{$nombreImagen}', descripcion = '{$descripcion}', habitaciones = '{$habitaciones}', wc = '{$wc}', parking = '{$parking}', vendedor = '{$vendedor}' WHERE ID = '$valor' ";
 
         $resultado = mysqli_query($db, $query);
     

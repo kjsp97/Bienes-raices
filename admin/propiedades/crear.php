@@ -1,14 +1,11 @@
 <?php 
 require __DIR__ .'/../../includes/app.php';
 
+use App\Propiedad;
 
-$auth = autentificacionAdmin();
-// print_r($_SESSION);
-if (!$auth) {
-    header('location: /');
-}
+autentificacionAdmin();
 
-$db = conectarDB();
+$db = conectarDB(); 
 incluirTemplates('header');
 
 $sqlVendedores = 'SELECT * FROM vendedores';
@@ -25,15 +22,21 @@ $parking = '';
 $vendedor = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    $propiedad = new Propiedad($_POST);
     
-    // echo '<pre>';
-    // var_dump($_POST);
-    // echo '</pre>';
-    // exit;
+    $propiedad->guardar();
+    // debugear($propiedad);
     
-    // echo '<pre>';
-    // var_dump($_FILES);
-    // echo '</pre>';
+
+
+
+    // debugear($_POST);
+    // debugear($_FILES);
+
+
+
+
 
     
     $titulo = mysqli_real_escape_string($db, $_POST['titulo']);
@@ -97,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . '/'. $nombreImagen);
 
 
-        $query = "INSERT INTO propiedades (titulo, precio, imagen,descripcion, habitaciones, wc, parking, creacion, vendedores_id) VALUES ('$titulo', '$precio', '$nombreImagen','$descripcion', '$habitaciones', '$wc', '$parking', '$creacion', '$vendedor');";
+        $query = "INSERT INTO propiedades (titulo, precio, imagen,descripcion, habitaciones, wc, parking, creacion, vendedor) VALUES ('$titulo', '$precio', '$nombreImagen','$descripcion', '$habitaciones', '$wc', '$parking', '$creacion', '$vendedor');";
     
         $resultado = mysqli_query($db, $query);
     
