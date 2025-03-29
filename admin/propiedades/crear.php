@@ -2,6 +2,8 @@
 require __DIR__ .'/../../includes/app.php';
 
 use App\Propiedad;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
 
 autentificacionAdmin();
 
@@ -11,7 +13,8 @@ incluirTemplates('header');
 $sqlVendedores = 'SELECT * FROM vendedores';
 $consulta = mysqli_query($db, $sqlVendedores);
 
-$errores = [];
+
+$errores = Propiedad::getErrors();
 
 $titulo = '';
 $precio = '';
@@ -25,92 +28,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $propiedad = new Propiedad($_POST);
     
-    $propiedad->guardar();
-    // debugear($propiedad);
+    $nombreImagen = md5(uniqid(rand(), true)) . '.jpeg';
+
+    if ($_FILES['imagen']['tmp_name']) {
+        $manager = new ImageManager(Driver::class);
+        $imagen = $manager->read($_FILES['imagen']['tmp_name'])->cover(800, 600);
+        $propiedad->getImage($nombreImagen);
+    }
+
+    $errores = $propiedad->validar();
+
+    // debugear($errores);
     
-
-
-
-    // debugear($_POST);
-    // debugear($_FILES);
-
-
-
-
-
-    
-    $titulo = mysqli_real_escape_string($db, $_POST['titulo']);
-    $precio = mysqli_real_escape_string($db, $_POST['precio']);
-    $descripcion = mysqli_real_escape_string($db, $_POST['descripcion']);
-    $habitaciones = mysqli_real_escape_string($db, $_POST['habitaciones']);
-    $wc = mysqli_real_escape_string($db, $_POST['wc']);
-    $parking = mysqli_real_escape_string($db, $_POST['parking']);
-    $vendedor = mysqli_real_escape_string($db, $_POST['vendedor']);
-    $creacion = date('Y/m/d');
-    $imagen = $_FILES['imagen'];
-
-    // echo '<pre>';
-    // var_dump($imagen);
-    // echo '</pre>';
-
-
-    if (!$titulo) {
-        $errores[] = 'Titulo es obligatorio.';
-    }
-    if (!$precio) {
-        $errores[] = 'Precio es obligatorio.';
-    }
-    if (strlen($descripcion) < 50) {
-        $errores[] = 'Descripcion debe ser mayor a 50 caracteres.';
-    }
-    if (!$habitaciones) {
-        $errores[] = 'Numero de habitaciones obligatorio.';
-    }
-    if (!$wc) {
-        $errores[] = 'Numero de wc obligatorio.';
-    }
-    if (!$parking) {
-        $errores[] = 'Numero de parkings obligatorio.';
-    }
-    if (!$vendedor) {
-        $errores[] = 'Seleccionar vendedor.';
-    }
-    if (!$imagen['name']) {
-        $errores[] = 'Imagen obligatoria.';
-    }
-    $medida = 40000 * 1024;
-    if ($imagen['size'] > $medida) {
-        $errores[] = 'Imagen muy pesada, máx 40MB.';
-    }
-    
-
-    // echo '<pre>';
-    // var_dump($errores);
-    // echo '</pre>';
-
-
-    if (!$errores) {
-        $carpetaImagenes = '../../imagenes';
+    if (empty($errores)) {
+        
+        $carpetaImagenes = '../../imagenes/';
 
         if (!is_dir($carpetaImagenes)) {
             mkdir($carpetaImagenes);
         }
-        $nombreImagen = md5(uniqid(rand(), true) . '.jpeg');
-        
-        move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . '/'. $nombreImagen);
 
+        $imagen->save($carpetaImagenes . $nombreImagen);
 
-        $query = "INSERT INTO propiedades (titulo, precio, imagen,descripcion, habitaciones, wc, parking, creacion, vendedor) VALUES ('$titulo', '$precio', '$nombreImagen','$descripcion', '$habitaciones', '$wc', '$parking', '$creacion', '$vendedor');";
-    
-        $resultado = mysqli_query($db, $query);
-    
+        $resultado = $propiedad->guardar();
         if ($resultado) {
             header('Location: /admin?valor=1');
         }
+    }
+    // debugear($propiedad);
+    
+    
+    // debugear($_POST);
+    // debugear($_FILES);
 
-
-        exit;
-    }}
+}
 
 ?>
 
@@ -133,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <legend>Información General</legend>
             <div class="type">
                 <label for="titulo">titulo:</label>
-                <input id="titulo" name="titulo" type="text" placeholder="Titulo de la propiedad" value="<?php echo $titulo; ?>">
+                <input id="titulo" name="titulo" type="text" placeholder="Titulo de la propiedad" value="<?php echo $propiedad->titulo?? ''; ?>">
             </div>
             <div class="type">
                 <label for="precio">precio:</label>

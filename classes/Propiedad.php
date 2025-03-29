@@ -7,6 +7,8 @@ namespace App;
 
 class Propiedad {
     protected static $db;
+    protected static $columnaDB = ['id','titulo','precio','imagen','descripcion','habitaciones','wc','parking','creacion','vendedor'];
+    protected static $errores = [];
 
     public $id;
     public $titulo;
@@ -24,7 +26,7 @@ class Propiedad {
         $this->id = $args['id']?? '';
         $this->titulo = $args['titulo']?? '';
         $this->precio = $args['precio']?? '';
-        $this->imagen = $args['imagen']?? 'imagen.jpeg';
+        $this->imagen = $args['imagen']?? '';
         $this->descripcion = $args['descripcion']?? '';
         $this->habitaciones = $args['habitaciones']?? '';
         $this->wc = $args['wc']?? '';
@@ -34,14 +36,73 @@ class Propiedad {
     }
 
     public function guardar() {
-        $query = "INSERT INTO propiedades (titulo, precio, imagen,descripcion, habitaciones, wc, parking, creacion, vendedor) VALUES ('$this->titulo', '$this->precio', '$this->imagen','$this->descripcion', '$this->habitaciones', '$this->wc', '$this->parking', '$this->creacion', '$this->vendedor')";
-        // $resultado = self::$db->query($query);
+        $atributos = $this->sanitizar();
+        $atributosKeys = join(" ," ,array_keys($atributos));
+        $atributosValues = join("' , '", array_values($atributos));
+
+        $query = "INSERT INTO propiedades ($atributosKeys) VALUES ('$atributosValues')";
+        $resultado = self::$db->query($query);
+        return $resultado;
     }
     
     public static function setDB($database){
         self::$db = $database;
     }
     
+    public function atributos() {
+        $atributos = [];
+        foreach (self::$columnaDB as $columna) {
+            if ($columna === 'id') continue;
+            $atributos[$columna] = $this->$columna;
+        }
+        return $atributos;
+    }
 
+    public function sanitizar (){
+        $atributos = $this->atributos();
+        $sanitizado = [];
+        foreach ($atributos as $key => $value) {
+            $sanitizado[$key] = self::$db->escape_string($value);
+        }
+        return $sanitizado;
+    }
 
+    public static function getErrors(){
+        return self::$errores;
+    }
+
+    public function validar(){
+        if (!$this->titulo) {
+            self::$errores[] = 'Titulo es obligatorio.';
+        }
+        if (!$this->precio) {
+            self::$errores[] = 'Precio es obligatorio.';
+        }
+        if (strlen($this->descripcion) < 50) {
+            self::$errores[] = 'Descripcion debe ser mayor a 50 caracteres.';
+        }
+        if (!$this->habitaciones) {
+            self::$errores[] = 'Numero de habitaciones obligatorio.';
+        }
+        if (!$this->wc) {
+            self::$errores[] = 'Numero de wc obligatorio.';
+        }
+        if (!$this->parking) {
+            self::$errores[] = 'Numero de parkings obligatorio.';
+        }
+        if (!$this->vendedor) {
+            self::$errores[] = 'Seleccionar vendedor.';
+        }
+        if (!$this->imagen) {
+            self::$errores[] = 'Imagen obligatoria.';
+        }
+
+        return self::$errores;
+    }
+
+    public function getImage($imagen) {
+        if ($imagen) {
+            $this->imagen = $imagen;
+        }
+    }
 }
