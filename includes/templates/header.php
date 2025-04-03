@@ -33,7 +33,7 @@ $auth = $_SESSION['login']?? false;
                     <a href="contacto.php">Contacto</a>
                     <a href="<?php echo !$auth? '/login.php': '/logout.php'?>"><?php echo !$auth? 'conectarse': 'cerrar sesion'?></a>
                     <a href="#">
-                        <img src="/build/img/dark-mode.svg" alt="luna dark-mode">
+                        <img class="botonDM" src="/build/img/dark-mode.svg" alt="luna dark-mode">
                     </a>
                 </nav>
 

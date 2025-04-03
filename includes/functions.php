@@ -2,6 +2,7 @@
 
 define('TEMPLATES_URL', __DIR__ . '/templates');
 define('FUNCTIONS_URL', __DIR__ . '/functions.php');
+define('FUNCTIONS_IMAGENES', __DIR__ . '/../imagenes/');
 
 
 function incluirTemplates(string $name, bool $inicio = false, bool $login = false) {
@@ -16,7 +17,7 @@ function autentificacionAdmin() {
     }
 }
 
-function debugear($variable) {
+function debug($variable) {
     echo '<pre>';
     var_dump($variable);
     echo '</pre>';
@@ -28,4 +29,9 @@ function printr($variable) {
     var_dump($variable);
     echo '</pre>';
 exit;
+}
+
+function s($html) : string {
+    $s = htmlspecialchars($html);
+    return $s;
 }

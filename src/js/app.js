@@ -13,35 +13,54 @@ barra.addEventListener('click', function () {
 }
 
 function modoOscuro() {
-    const navegacion = document.querySelector('.navegacion a:last-of-type');
-    const botonDm = navegacion;
-    
-    botonDm.addEventListener('click', e => {
-        e.preventDefault();
-        document.body.classList.toggle('dark-mode');
-    })
-    
-    const aparienciaDm = window.matchMedia('(prefers-color-scheme: dark)');
-    // console.log(aparienciaDm.matches);
-    
-    if (aparienciaDm.matches) {
-        document.body.classList.add('dark-mode');
+    const boton = document.querySelector('.botonDM');
+    const body = document.querySelector('body');
+
+    // Verificar si el usuario ya guardó una preferencia en localStorage
+    const preferenciaGuardada = localStorage.getItem('modoOscuro');
+
+    if (preferenciaGuardada === 'activado') {
+        body.classList.add('dark-mode');
+    } else if (preferenciaGuardada === 'desactivado') {
+        body.classList.remove('dark-mode');
     } else {
-        document.body.classList.remove('dark-mode');
-    }
-    
-    aparienciaDm.addEventListener('change', () => {
-        if (aparienciaDm.matches) {
-            document.body.classList.add('dark-mode');
-        } else {
-            document.body.classList.remove('dark-mode');
+        // Si no hay preferencia, seguir la configuración del sistema
+        const darkmode = window.matchMedia('(prefers-color-scheme: dark)');
+        if (darkmode.matches) {
+            body.classList.add('dark-mode');
         }
-    })
+    }
+
+    // Evento para cambiar el modo manualmente
+    boton.addEventListener('click', (e) => {
+        e.preventDefault();
+        body.classList.toggle('dark-mode');
+
+        // Guardar la preferencia del usuario en localStorage
+        if (body.classList.contains('dark-mode')) {
+            localStorage.setItem('modoOscuro', 'activado');
+        } else {
+            localStorage.setItem('modoOscuro', 'desactivado');
+        }
+    });
 }
 
+// function modoOscuro() {
+//     const boton = document.querySelector('.botonDM')
+//     const body = document.querySelector('body')
 
-// if (navegacion.classList.contains('on')) {
-//     navegacion.classList.remove('on');
-// }else {
-//     navegacion.classList.add('on');
+//     if (localStorage.getItem('modoOscuro') === 'activado') {
+//         body.classList.add('dark-mode');
+//     }
+
+//     boton.addEventListener('click', e=>{
+//         e.preventDefault()
+//         body.classList.toggle('dark-mode')
+
+//         if (body.classList.contains('dark-mode')) {
+//             localStorage.setItem('modoOscuro', 'activado');
+//         } else {
+//             localStorage.setItem('modoOscuro', 'desactivado');
+//         }
+//     })
 // }

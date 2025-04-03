@@ -2,9 +2,6 @@
 
 namespace App;
 
-
-
-
 class Propiedad {
     protected static $db;
     protected static $columnaDB = ['id','titulo','precio','imagen','descripcion','habitaciones','wc','parking','creacion','vendedor'];
@@ -32,15 +29,36 @@ class Propiedad {
         $this->wc = $args['wc']?? '';
         $this->parking = $args['parking']?? '';
         $this->creacion = date('Y/m/d');
-        $this->vendedor = $args['vendedor']?? '';
+        $this->vendedor = $args['vendedor']?? '1';
     }
 
-    public function guardar() {
+    // public function guardar(){
+    //     if ($this->id) {
+    //         $this->actualizar();
+    //     }else{
+    //         $this->crear();
+    //     }
+    // }
+
+    public function crear() {
         $atributos = $this->sanitizar();
         $atributosKeys = join(" ," ,array_keys($atributos));
         $atributosValues = join("' , '", array_values($atributos));
 
         $query = "INSERT INTO propiedades ($atributosKeys) VALUES ('$atributosValues')";
+        $resultado = self::$db->query($query);
+        // debug($resultado);
+        return $resultado;
+    }
+
+    public function actualizar(){
+        $atributos = $this->sanitizar();
+        $valores = [];
+        foreach ($atributos as $key => $value) {
+            $valores[] = "{$key}= '{$value}' ";
+        }
+        $query = "UPDATE propiedades SET ". join(', ', $valores) . " WHERE id = " . self::$db->escape_string($this->id) . " LIMIT 1 ";
+        // debug($query);
         $resultado = self::$db->query($query);
         return $resultado;
     }
@@ -100,9 +118,55 @@ class Propiedad {
         return self::$errores;
     }
 
-    public function getImage($imagen) {
+    public function setImage($imagen) {
+        if ($this->id) {
+            $existeArchivo = file_exists(FUNCTIONS_IMAGENES . $this->imagen);
+            if ($existeArchivo) {
+                unlink(FUNCTIONS_IMAGENES . $this->imagen);
+            }
+        }
+
         if ($imagen) {
             $this->imagen = $imagen;
+        }
+    }
+
+    public static function all() {
+        $query = 'SELECT * FROM propiedades';
+        return self::consultarQuery($query);
+    }
+
+    public static function consultarQuery($query) {
+        $resultado = self::$db->query($query);
+        $array = [];
+        while ($row = $resultado->fetch_assoc()) {
+            $array[] = self::crearObjeto($row);
+        }
+        $resultado->free();
+        return $array;
+    }
+
+    public static function crearObjeto($row) {
+        $objeto = new self;
+        foreach ($row as $key => $value) {
+            if (property_exists($objeto, $key)) {
+                $objeto->$key = $value;
+            }
+        }
+        return $objeto;
+    }
+
+    public static function find($id){
+        $query = "SELECT * FROM propiedades WHERE id = '{$id}' ";
+        $consulta = self::consultarQuery($query);
+        return array_shift($consulta);
+    }
+
+    public function sincronizar($args = []) {
+        foreach ($args as $key => $value) {
+            if (property_exists($this, $key) && !is_null($value)) {
+                $this->$key = $value;
+            }
         }
     }
 }
