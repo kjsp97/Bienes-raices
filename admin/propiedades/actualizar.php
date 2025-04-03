@@ -45,12 +45,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $imagen->save(FUNCTIONS_IMAGENES . $nombreImagen);
         }
 
-        $resultado = $propiedad->actualizar();
+        $resultado = $propiedad->guardar();
+
         if ($resultado) {
             header('Location: /admin?id=2');
         }
-
-
     }  
 
 

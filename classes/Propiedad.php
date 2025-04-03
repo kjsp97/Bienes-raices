@@ -20,7 +20,7 @@ class Propiedad {
 
     function __construct($args = [])
     {
-        $this->id = $args['id']?? '';
+        $this->id = $args['id']?? null;
         $this->titulo = $args['titulo']?? '';
         $this->precio = $args['precio']?? '';
         $this->imagen = $args['imagen']?? '';
@@ -32,13 +32,14 @@ class Propiedad {
         $this->vendedor = $args['vendedor']?? '1';
     }
 
-    // public function guardar(){
-    //     if ($this->id) {
-    //         $this->actualizar();
-    //     }else{
-    //         $this->crear();
-    //     }
-    // }
+    public function guardar(){
+        if (!is_null($this->id)) {
+            return $this->actualizar();
+        }else{
+            return $this->crear();
+        }
+    }
+    
 
     public function crear() {
         $atributos = $this->sanitizar();
@@ -47,7 +48,6 @@ class Propiedad {
 
         $query = "INSERT INTO propiedades ($atributosKeys) VALUES ('$atributosValues')";
         $resultado = self::$db->query($query);
-        // debug($resultado);
         return $resultado;
     }
 
@@ -58,7 +58,12 @@ class Propiedad {
             $valores[] = "{$key}= '{$value}' ";
         }
         $query = "UPDATE propiedades SET ". join(', ', $valores) . " WHERE id = " . self::$db->escape_string($this->id) . " LIMIT 1 ";
-        // debug($query);
+        $resultado = self::$db->query($query);
+        return $resultado;
+    }
+
+    public function eliminar($id){
+        $query = "DELETE FROM propiedades WHERE id = " . self::$db->escape_string($id) ;
         $resultado = self::$db->query($query);
         return $resultado;
     }
@@ -119,15 +124,19 @@ class Propiedad {
     }
 
     public function setImage($imagen) {
-        if ($this->id) {
-            $existeArchivo = file_exists(FUNCTIONS_IMAGENES . $this->imagen);
-            if ($existeArchivo) {
-                unlink(FUNCTIONS_IMAGENES . $this->imagen);
-            }
+        if (!is_null($this->id)) {
+            $this->deleteImage();
         }
 
         if ($imagen) {
             $this->imagen = $imagen;
+        }
+    }
+
+    public function deleteImage() {
+        $existeArchivo = file_exists(FUNCTIONS_IMAGENES . $this->imagen);
+        if ($existeArchivo) {
+            unlink(FUNCTIONS_IMAGENES . $this->imagen);
         }
     }
 

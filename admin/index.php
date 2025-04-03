@@ -13,29 +13,20 @@ $id = $_GET['id']?? null;
 incluirTemplates('header');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = $_POST['id'];
-    $id = filter_var($id, FILTER_VALIDATE_INT);
-
-    if ($id) {
-        $sqlimagen = "SELECT imagen FROM propiedades WHERE id = '{$id}' ";
-        $consulta = mysqli_query($db, $sqlimagen);
-        $resultadoimagen = mysqli_fetch_assoc($consulta);
-
-        $carpetaImagenes = '../imagenes/';
-        unlink($carpetaImagenes . $resultadoimagen['imagen']);
-        
-
-        $sqlborrar = "DELETE FROM propiedades WHERE id = {$id} ";
-
-        $resultado = mysqli_query($db, $sqlborrar);
-        if ($resultado) {
-            header('location: /admin?id=3');
-        }
-    }
-
-
-    // var_dump($sqlborrar);
     
+    $id = $_POST['id'];
+    
+    if ($id) {
+
+        $propiedad = Propiedad::find($id);
+        $propiedad->deleteImage();
+        $resultado = $propiedad->eliminar($id);
+            
+        if ($resultado) {
+            header('Location: /admin?id=3');
+        }
+        
+    }
 }
 
 ?>
