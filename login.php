@@ -4,11 +4,7 @@ require __DIR__ .'/includes/app.php';
 $db = conectarDB();
 incluirTemplates('header', false, true);
 
-
 $errores = [];
-
-
-// print_r($_POST);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = mysqli_real_escape_string($db, filter_var($_POST['email'], FILTER_VALIDATE_EMAIL));
@@ -59,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form class="personalF" method="POST">
             <fieldset>
 
-                <legend>Usuario y Contraseña</legend>
+                <legend>Log-in</legend>
                 
                 <div class="type">
                     <label for="email">Usuario</label>

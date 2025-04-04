@@ -14,7 +14,7 @@ incluirTemplates('header');
             </picture>
             <section>
                 <h4>25 Años de Experiencia</h4>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, cum dolore ratione voluporem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, cum dolore ratione voluporem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, cum dolore ratione voluporem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, cum dolore ratione voluporem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, cum dolore ratione voluptatibus obcaecati molestias, placeat quod omnis unde dolor ea vitae eos tempore ipsam amet, reprehenderit id dolorum temporibus.</p>
+                <p>Con más de 25 años de experiencia en el sector inmobiliario, nuestra empresa se ha consolidado como un referente en la compra, venta y alquiler de propiedades. Nos especializamos en ofrecer soluciones personalizadas, adaptándonos a las necesidades de cada cliente con profesionalismo y compromiso. Nuestro equipo de expertos trabaja incansablemente para garantizar que cada transacción sea exitosa, brindando asesoramiento integral en cada etapa del proceso. Ya sea que busques tu hogar ideal, una inversión rentable o un espacio comercial estratégico, estamos aquí para ayudarte a cumplir tus objetivos.</p>
             </section>
 
         </div>

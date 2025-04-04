@@ -1,21 +1,20 @@
 <?php
 
 use App\Propiedad;
+use App\Vendedor;
 
 require __DIR__ .'/../../includes/app.php';
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
 
-
 autentificacionAdmin();
 
-$db = conectarDB();
 incluirTemplates('header');
 $id = $_GET['id'];
 $id = filter_var($id, FILTER_VALIDATE_INT);
 
 $propiedad = Propiedad::find($id);
-// debug($propiedad->imagen);
+$vendedores = Vendedor::all();
 
 $errores = Propiedad::getErrors();
 
@@ -37,37 +36,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errores = $propiedad->validar();
     
     if (empty($errores)) {
-        
         if (isset($imagen)) {
             if (!is_dir(FUNCTIONS_IMAGENES)) {
                 mkdir(FUNCTIONS_IMAGENES);
             }
             $imagen->save(FUNCTIONS_IMAGENES . $nombreImagen);
         }
-
-        $resultado = $propiedad->guardar();
-
-        if ($resultado) {
-            header('Location: /admin?id=2');
-        }
+        $propiedad->guardar();
     }  
-
-
-
-    // debug($propiedad);
-
-        
-
-
-
-    // $query = "UPDATE propiedades SET titulo = '{$titulo}', precio = '{$precio}', imagen = '{$nombreImagen}', descripcion = '{$descripcion}', habitaciones = '{$habitaciones}', wc = '{$wc}', parking = '{$parking}', vendedor = '{$vendedor}' WHERE ID = '$id' ";
-
-    // $resultado = mysqli_query($db, $query);
-
-    // if ($resultado) {
-    //     header("Location: /admin?id=2");
-    // }
-
 }?>
 
 <main class="contenedor seccion">

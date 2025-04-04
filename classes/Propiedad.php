@@ -2,10 +2,10 @@
 
 namespace App;
 
-class Propiedad {
-    protected static $db;
+class Propiedad extends ActiveRecord{
+    protected static $tabla = 'propiedades';
     protected static $columnaDB = ['id','titulo','precio','imagen','descripcion','habitaciones','wc','parking','creacion','vendedor'];
-    protected static $errores = [];
+
 
     public $id;
     public $titulo;
@@ -29,69 +29,7 @@ class Propiedad {
         $this->wc = $args['wc']?? '';
         $this->parking = $args['parking']?? '';
         $this->creacion = date('Y/m/d');
-        $this->vendedor = $args['vendedor']?? '1';
-    }
-
-    public function guardar(){
-        if (!is_null($this->id)) {
-            return $this->actualizar();
-        }else{
-            return $this->crear();
-        }
-    }
-    
-
-    public function crear() {
-        $atributos = $this->sanitizar();
-        $atributosKeys = join(" ," ,array_keys($atributos));
-        $atributosValues = join("' , '", array_values($atributos));
-
-        $query = "INSERT INTO propiedades ($atributosKeys) VALUES ('$atributosValues')";
-        $resultado = self::$db->query($query);
-        return $resultado;
-    }
-
-    public function actualizar(){
-        $atributos = $this->sanitizar();
-        $valores = [];
-        foreach ($atributos as $key => $value) {
-            $valores[] = "{$key}= '{$value}' ";
-        }
-        $query = "UPDATE propiedades SET ". join(', ', $valores) . " WHERE id = " . self::$db->escape_string($this->id) . " LIMIT 1 ";
-        $resultado = self::$db->query($query);
-        return $resultado;
-    }
-
-    public function eliminar($id){
-        $query = "DELETE FROM propiedades WHERE id = " . self::$db->escape_string($id) ;
-        $resultado = self::$db->query($query);
-        return $resultado;
-    }
-    
-    public static function setDB($database){
-        self::$db = $database;
-    }
-    
-    public function atributos() {
-        $atributos = [];
-        foreach (self::$columnaDB as $columna) {
-            if ($columna === 'id') continue;
-            $atributos[$columna] = $this->$columna;
-        }
-        return $atributos;
-    }
-
-    public function sanitizar (){
-        $atributos = $this->atributos();
-        $sanitizado = [];
-        foreach ($atributos as $key => $value) {
-            $sanitizado[$key] = self::$db->escape_string($value);
-        }
-        return $sanitizado;
-    }
-
-    public static function getErrors(){
-        return self::$errores;
+        $this->vendedor = $args['vendedor']?? '';
     }
 
     public function validar(){
@@ -114,68 +52,12 @@ class Propiedad {
             self::$errores[] = 'Numero de parkings obligatorio.';
         }
         if (!$this->vendedor) {
-            self::$errores[] = 'Seleccionar vendedor.';
+            self::$errores[] = 'Seleccionar vendedor!';
         }
         if (!$this->imagen) {
             self::$errores[] = 'Imagen obligatoria.';
         }
 
         return self::$errores;
-    }
-
-    public function setImage($imagen) {
-        if (!is_null($this->id)) {
-            $this->deleteImage();
-        }
-
-        if ($imagen) {
-            $this->imagen = $imagen;
-        }
-    }
-
-    public function deleteImage() {
-        $existeArchivo = file_exists(FUNCTIONS_IMAGENES . $this->imagen);
-        if ($existeArchivo) {
-            unlink(FUNCTIONS_IMAGENES . $this->imagen);
-        }
-    }
-
-    public static function all() {
-        $query = 'SELECT * FROM propiedades';
-        return self::consultarQuery($query);
-    }
-
-    public static function consultarQuery($query) {
-        $resultado = self::$db->query($query);
-        $array = [];
-        while ($row = $resultado->fetch_assoc()) {
-            $array[] = self::crearObjeto($row);
-        }
-        $resultado->free();
-        return $array;
-    }
-
-    public static function crearObjeto($row) {
-        $objeto = new self;
-        foreach ($row as $key => $value) {
-            if (property_exists($objeto, $key)) {
-                $objeto->$key = $value;
-            }
-        }
-        return $objeto;
-    }
-
-    public static function find($id){
-        $query = "SELECT * FROM propiedades WHERE id = '{$id}' ";
-        $consulta = self::consultarQuery($query);
-        return array_shift($consulta);
-    }
-
-    public function sincronizar($args = []) {
-        foreach ($args as $key => $value) {
-            if (property_exists($this, $key) && !is_null($value)) {
-                $this->$key = $value;
-            }
-        }
     }
 }

@@ -2,51 +2,54 @@
 require __DIR__ .'/../includes/app.php';
 autentificacionAdmin();
 use App\Propiedad;
+use App\Vendedor;
 
 $propiedades = Propiedad::all();
-// debug($propiedades);
-
+$vendedores = Vendedor::all();
 
 $id = $_GET['id']?? null;
-
 
 incluirTemplates('header');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    
+
     $id = $_POST['id'];
     
     if ($id) {
 
-        $propiedad = Propiedad::find($id);
-        $propiedad->deleteImage();
-        $resultado = $propiedad->eliminar($id);
-            
-        if ($resultado) {
-            header('Location: /admin?id=3');
+        $tipo = $_POST['tipo'];
+
+        if (validarTipoContenido($tipo)) {
+            if ($tipo === 'propiedad') {
+                $propiedad = Propiedad::find($id);
+                $propiedad->deleteImage();
+                $resultado = $propiedad->eliminar($id);
+
+            } elseif($tipo === 'vendedor') {
+                $vendedor = Vendedor::find($id);
+                $resultado = $vendedor->eliminar($id);
+            }
+
         }
-        
     }
 }
 
+
 ?>
-<div class="aviso correcto">
-    <?php if ($id === '1') { ?>
-        <p> <?php echo 'Enivado Correctamente'; ?> </p>
+<div class="aviso neutro">
+    <?php 
+    $mensaje = mostrarAviso(intval($id));
+    if ($mensaje) { ?>
+        <p> <?php echo s($mensaje); ?> </p>
     <?php } ?>
 </div>
-<div class="aviso correcto">
-    <?php if ($id === '2') { ?>
-        <p> <?php echo 'Actualizado Correctamente'; ?> </p>
-    <?php } ?>
-</div>
-<div class="aviso error">
-    <?php if ($id === '3') { ?>
-        <p> <?php echo 'Eliminado Correctamente'; ?> </p>
-    <?php } ?>
+
 </div>
 <main class="contenedor seccion">
     <h1>Administrador de DB</h1>
+    <a href="/admin/propiedades/crear.php" class="boton boton-gris">Crear Propiedad</a>
+    <a href="/admin/vendedores/crear.php" class="boton boton-gris">Crear Vendedor</a>
+    <h2>Propiedades</h2>
     <table class="table-propiedades">
         <thead>
             <tr>
@@ -65,9 +68,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <td class="contenedor-ti"><img src="/imagenes/<?php echo $propiedad->imagen; ?>" class="tabla-imagen"></td>
                     <td><?php echo $propiedad->precio; ?>€</td>
                     <td>
-                        <a href="/admin/propiedades/actualizar.php<?php echo '?id='. $propiedad->id; ?>"" class="boton-verde">Actualizar</a>
+                        <a href="/admin/propiedades/actualizar.php<?php echo '?id='. $propiedad->id; ?>" class="boton-verde">Actualizar</a>
                         <form method="POST">
                             <input type="hidden" name="id" value="<?php echo $propiedad->id; ?>">
+                            <input type="hidden" name="tipo" value="propiedad">
                             <input type="submit" class="boton-rojo w-100" value="Eliminar">
                         </form>
                     </td>
@@ -77,10 +81,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </tbody>
     </table>
 
-    <a href="/admin/propiedades/crear.php" class="boton boton-gris">Crear Propiedad</a>
+    <h2>Vendedores</h2>
+    <table class="table-propiedades">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Movil</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($vendedores as $vendedor) {?>
+                <tr>
+                    <td><?php echo $vendedor->id; ?></td>
+                    <td><?php echo $vendedor->nombre . ' ' . $vendedor->apellido; ?></td>
+                    <td><?php echo $vendedor->movil; ?></td>
+                    <td>
+                        <a href="/admin/vendedores/actualizar.php<?php echo '?id='. $vendedor->id; ?>" class="boton-verde">Actualizar</a>
+                        <form method="POST">
+                            <input type="hidden" name="id" value="<?php echo $vendedor->id; ?>">
+                            <input type="hidden" name="tipo" value="vendedor">
+                            <input type="submit" class="boton-rojo w-100" value="Eliminar">
+                        </form>
+                    </td>
+                </tr>
+            <?php }?>
+
+        </tbody>
+    </table>
 </main>
 
 <?php 
-mysqli_close($db);
 incluirTemplates('footer');
 ?>
