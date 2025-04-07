@@ -44,7 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $propiedad->guardar();
     }  
-}?>
+}
+?>
 
 <main class="contenedor seccion">
     <h1>Actualizar Propiedades</h1>

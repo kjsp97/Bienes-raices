@@ -12,10 +12,10 @@
                 <label for="imagen">imagen:</label>
                 <input id="imagen" name="propiedad[imagen]" type="file" accept="image/jpeg, image/png">
             </div>  
-                <?php if ($propiedad->imagen) {?>
-                <img src="/imagenes/<?php echo $propiedad->imagen; ?>" alt="imagen no subida" class="img-small">
-                <?php }?>
-                <div class="type">
+            <?php if ($propiedad->imagen && $_SERVER["PHP_SELF"] === "/admin/propiedades/actualizar.php") {?>
+            <img src="/imagenes/<?php echo $propiedad->imagen; ?>" alt="imagen no subida" class="img-small">
+            <?php }?>
+            <div class="type">
                 <label for="descripcion">descripcion:</label>
                 <textarea name="propiedad[descripcion]"><?php echo s($propiedad->descripcion); ?></textarea>
             </div>

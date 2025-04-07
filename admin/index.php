@@ -14,6 +14,7 @@ incluirTemplates('header');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $id = $_POST['id'];
+    $id = filter_var($id, FILTER_VALIDATE_INT);
     
     if ($id) {
 
@@ -44,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php } ?>
 </div>
 
-</div>
+
 <main class="contenedor seccion">
     <h1>Administrador de DB</h1>
     <a href="/admin/propiedades/crear.php" class="boton boton-gris">Crear Propiedad</a>

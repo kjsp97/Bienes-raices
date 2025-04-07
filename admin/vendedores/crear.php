@@ -12,7 +12,6 @@ $errores = Vendedor::getErrors();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $vendedor = new Vendedor($_POST['vendedor']);
-    
     $errores = $vendedor->validar();
 
     if (empty($errores)) {

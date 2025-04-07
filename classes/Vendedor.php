@@ -30,9 +30,8 @@ class Vendedor extends ActiveRecord{
         if (!$this->movil) {
             self::$errores[] = 'Movil es obligatorio.';
         }
-        if ($this->movil && !preg_match('/[0-9]{9}/', $this->movil)) {
+        if ($this->movil && !preg_match('/^\d{9}$/', $this->movil)) {
             self::$errores[] = 'Formato no valido.';
-
         }
         
         return self::$errores;

@@ -6,9 +6,9 @@ autentificacionAdmin();
 use App\Vendedor;
 
 $id = $_GET['id'];
+$id = filter_var($id, FILTER_VALIDATE_INT);
 
 $vendedor = Vendedor::find($id);
-
 
 $errores = Vendedor::getErrors();
 
@@ -17,15 +17,13 @@ incluirTemplates('header');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $args = $_POST['vendedor'];
-
     $vendedor->sincronizar($args);
-
-    $errores = $vendedor->getErrors();
+    
+    $errores = $vendedor->validar();
     
     if (empty($errores)) {
         $vendedor->guardar();
     }
-
 }
 
 ?>
